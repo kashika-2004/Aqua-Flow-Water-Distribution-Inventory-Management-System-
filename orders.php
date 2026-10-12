@@ -1,0 +1,8 @@
+					<div class="section-heading"><div><h2>Customer orders</h2><p>Dispatching an order deducts its packed product quantities from filled stock and records the movement once.</p></div></div>
+					<div class="table-wrap"><table><thead><tr><th>Order</th><th>Customer / items</th><th>Delivery</th><th>Total</th><th>Payment</th><th>Status</th></tr></thead><tbody>
+					<?php foreach ($orders as $row): ?><tr><td><strong><?= e($row['order_number']) ?></strong><br><span class="muted"><?= e($row['created_at']) ?></span></td><td><?= e($row['customer_name']) ?><br><span class="muted"><?= e($row['items']) ?></span></td><td><?= e($row['delivery_address']) ?><br><span class="muted"><?= e($row['contact_phone']) ?></span></td><td>$<?= number_format((float) $row['total_amount'], 2) ?></td><td><span class="pill"><?= e($row['payment_status']) ?></span></td><td><form class="order-form" method="post" action="admindashboard.php?tab=orders">
+							<input type="hidden" name="csrf_token" value="<?= e($_SESSION['admin_csrf']) ?>"><input type="hidden" name="tab" value="orders"><input type="hidden" name="action" value="update_order"><input type="hidden" name="order_id" value="<?= (int) $row['id'] ?>">
+							<select name="order_status"><?php foreach (['PENDING','CONFIRMED','PREPARING','DISPATCHED','DELIVERED','CANCELLED','REJECTED'] as $orderStatusOption): ?><option <?= $row['order_status'] === $orderStatusOption ? 'selected' : '' ?>><?= e($orderStatusOption) ?></option><?php endforeach; ?></select><button type="submit">Update</button>
+						</form></td></tr><?php endforeach; ?>
+					<?php if (!$orders): ?><tr><td colspan="6" class="empty">No orders recorded.</td></tr><?php endif; ?>
+					</tbody></table></div>

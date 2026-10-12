@@ -1,0 +1,11 @@
+					<div class="section-heading"><div><h2>Production batches</h2><p>Each batch consumes empty containers and adds saleable filled units in the same transaction.</p></div></div>
+					<div class="panel"><h3>Record filling batch</h3><form method="post" action="admindashboard.php?tab=batches">
+						<input type="hidden" name="csrf_token" value="<?= e($_SESSION['admin_csrf']) ?>"><input type="hidden" name="tab" value="batches"><input type="hidden" name="action" value="create_batch">
+						<div class="fields four"><div class="field"><label for="batch-size">Bottle size</label><select id="batch-size" name="bottle_size_id" required><?php foreach ($sizes as $size): ?><option value="<?= (int) $size['id'] ?>"><?= e($size['size_name']) ?></option><?php endforeach; ?></select></div>
+						<div class="field"><label for="batch-filled">Good units filled</label><input id="batch-filled" name="quantity_filled" type="number" min="0" required></div><div class="field"><label for="batch-damaged">Damaged units</label><input id="batch-damaged" name="quantity_damaged" type="number" min="0" value="0" required></div><div class="field"><label for="batch-date">Filling date</label><input id="batch-date" name="filling_date" type="date" value="<?= e(date('Y-m-d')) ?>" required></div>
+						<div class="field wide"><label for="batch-remarks">Remarks</label><input id="batch-remarks" name="remarks" maxlength="2000"></div></div><div class="form-actions"><button class="primary" type="submit">Process batch</button></div>
+					</form></div>
+					<div class="table-wrap"><table><thead><tr><th>Batch</th><th>Size</th><th>Filled</th><th>Damaged</th><th>Date</th><th>Processed by</th><th>Remarks</th></tr></thead><tbody>
+					<?php foreach ($batches as $row): ?><tr><td><strong><?= e($row['batch_code']) ?></strong></td><td><?= e($row['size_name']) ?></td><td><?= number_format((int) $row['quantity_filled']) ?></td><td><?= number_format((int) $row['quantity_damaged']) ?></td><td><?= e($row['filling_date']) ?></td><td><?= e($row['processed_by']) ?></td><td><?= e($row['remarks']) ?></td></tr><?php endforeach; ?>
+					<?php if (!$batches): ?><tr><td colspan="7" class="empty">No production batches recorded.</td></tr><?php endif; ?>
+					</tbody></table></div>
